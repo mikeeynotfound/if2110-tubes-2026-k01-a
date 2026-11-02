@@ -1,0 +1,4 @@
+page_id,parent_id,title
+P1,P0,"Jurnal Anomali"
+P2,P0,"Rencana Mebel"
+P3,P1,"Portal Kampus"

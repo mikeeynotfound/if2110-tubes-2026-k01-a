@@ -1,0 +1,12 @@
+# Hasil kompilasi
+/bin/
+/build/
+*.o
+*.d
+
+# Berkas sementara editor/OS
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

@@ -1,0 +1,4 @@
+block_id,page_id,position,type,text,checked
+B1,P1,1,TEXT,"Portal ditemukan.",0
+B2,P3,1,CHECK,"Periksa koordinat",1
+B3,P3,2,CHECK,"Bawa senter",0
