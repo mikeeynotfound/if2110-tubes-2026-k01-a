@@ -6,31 +6,32 @@
 
 // adt dynamic list untuk link per node
 typedef struct {
-    int *linked;
+    int *contents;
     int capacity;
-    int nEff;
-} LinkList;
+    int size;
+} VertexList;
 
 // index based hash map adjacency list
 typedef struct {
-    LinkList *out;            // edges menuju keluar page
-    LinkList *in;             // edges menuju ke dalam page (backlink)
+    VertexList *out;            // edges menuju keluar page
+    VertexList *in;             // edges menuju ke dalam page (backlink)
     int capacity;
-    int nEff;
+    int size;
 } Graph;
 
 // -------------- ADT LINKS --------------
 // CONSTRUCTOR AND DESTRUCTOR 
-LinkList create_linklist();
-LinkList delete_linklist(LinkList *links);
+VertexList create_vertexlist();
+void delete_vertexlist(VertexList *list);
+void set_vertexlist_capacity(VertexList *list, int new_cap);
 
 // PREDICATE
-boolean is_link_empty(LinkList *links);
-boolean is_link_exist(LinkList *links, int id);
+boolean is_link_empty(VertexList *list);
+boolean is_link_exist(VertexList *list, int id);
 
 // SETTER
-void add_edge(LinkList *links, int dest_id);
-void remove_edge(LinkList *links, int dest_id);
+void add_link(VertexList *list, int dest_id);
+void remove_link(VertexList *list, int dest_id);
 
 
 // ----------- ADT GRAPH ------------
@@ -39,8 +40,8 @@ Graph create_graph();
 Graph delete_graph();
 
 // GETTER AND SETTER
-LinkList get_in_links(Graph *graph, int id);
-LinkList get_out_links(Graph *graph, int id);
+VertexList get_in_links(Graph *graph, int id);
+VertexList get_out_links(Graph *graph, int id);
 
 void add_links(Graph *graph, int id_source, int id_dest);
 void remove_links(Graph *graph, int id_source, int id_dest);
