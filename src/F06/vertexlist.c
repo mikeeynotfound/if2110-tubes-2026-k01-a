@@ -45,11 +45,11 @@ boolean set_vertexlist_capacity(VertexList *list, int new_cap) {
 }
 
 // PREDICATES
-boolean is_link_empty(VertexList *list) {
+boolean is_vertexlist_empty(VertexList *list) {
     return (list->size == 0);
 }
 
-boolean is_link_exist(VertexList *list, int id) {
+boolean is_vertex_exist(VertexList *list, int id) {
     for (int i = 0; i < list->size; i++) {
         if (list->contents[i] == id) return true;
     }
@@ -58,8 +58,8 @@ boolean is_link_exist(VertexList *list, int id) {
 }
 
 // SETTER
-void add_link(VertexList *list, int id) {
-    if (is_link_exist(list, id)) return;
+void add_vertex(VertexList *list, int id) {
+    if (is_vertex_exist(list, id)) return;
 
     if (list->size == list->capacity) {
         if (list->capacity == 0) set_vertexlist_capacity(list, DEFAULT_CAPACITY);
@@ -76,8 +76,11 @@ void add_link(VertexList *list, int id) {
     list->size++;
 }
 
-void remove_link(VertexList *list, int target_id) {
+void remove_vertex(VertexList *list, int target_id) {
     int size = list->size;
+    int capacity = list->capacity;
+
+    if (size <= capacity / 4) set_vertexlist_capacity(list, size / 2);
 
     int i = 0;
     while (i < size && list->contents[i] != target_id) i++;

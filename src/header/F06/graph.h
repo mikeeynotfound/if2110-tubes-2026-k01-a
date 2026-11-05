@@ -26,25 +26,28 @@ void delete_vertexlist(VertexList *list);
 boolean set_vertexlist_capacity(VertexList *list, int new_cap);
 
 // PREDICATE
-boolean is_link_empty(VertexList *list);
-boolean is_link_exist(VertexList *list, int id);
+boolean is_vertexlist_empty(VertexList *list);
+boolean is_vertex_exist(VertexList *list, int id);
 
 // SETTER
-void add_link(VertexList *list, int dest_id);
-void remove_link(VertexList *list, int dest_id);
+void add_vertex(VertexList *list, int dest_id);
+void remove_vertex(VertexList *list, int dest_id);
 
 
 // ----------- ADT GRAPH ------------
 // CONSTRUCTOR AND DESTRUCTOR
 Graph create_graph();
-Graph delete_graph(Graph *graph);
+void delete_graph(Graph *graph);
 boolean set_graph_capacity(Graph *graph, int new_cap);
 
 // GETTER AND SETTER
-VertexList get_in_links(Graph *graph, int id);
-VertexList get_out_links(Graph *graph, int id);
+VertexList *get_in_links(Graph *graph, int id);
+VertexList *get_out_links(Graph *graph, int id);
 
 void add_links(Graph *graph, int id_source, int id_dest);
 void remove_links(Graph *graph, int id_source, int id_dest);
+
+// PREDICATES
+boolean is_link_exist(Graph *graph, int id_source, int id_dest);
 
 #endif
