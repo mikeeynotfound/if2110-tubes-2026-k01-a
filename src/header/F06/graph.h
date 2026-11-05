@@ -1,7 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <boolean.h>
+#include "header/boolean.h"
 #define DEFAULT_CAPACITY 5
 
 // adt dynamic list untuk link per node

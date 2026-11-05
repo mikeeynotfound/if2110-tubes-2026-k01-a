@@ -9,7 +9,7 @@ Graph create_graph() {
     return graph;
 }
 
-Graph delete_graph(Graph *graph) {
+void delete_graph(Graph *graph) {
     for (int i = 0; i < graph->capacity; i++) {
         delete_vertexlist(&graph->in[i]);
         delete_vertexlist(&graph->out[i]);
