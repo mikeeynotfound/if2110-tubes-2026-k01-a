@@ -23,7 +23,7 @@ typedef struct {
 // CONSTRUCTOR AND DESTRUCTOR 
 VertexList create_vertexlist();
 void delete_vertexlist(VertexList *list);
-void set_vertexlist_capacity(VertexList *list, int new_cap);
+boolean set_vertexlist_capacity(VertexList *list, int new_cap);
 
 // PREDICATE
 boolean is_link_empty(VertexList *list);
@@ -38,7 +38,7 @@ void remove_link(VertexList *list, int dest_id);
 // CONSTRUCTOR AND DESTRUCTOR
 Graph create_graph();
 Graph delete_graph(Graph *graph);
-void set_graph_capacity(Graph *graph, int new_cap);
+boolean set_graph_capacity(Graph *graph, int new_cap);
 
 // GETTER AND SETTER
 VertexList get_in_links(Graph *graph, int id);

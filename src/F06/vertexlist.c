@@ -8,10 +8,7 @@ VertexList create_vertexlist() {
     res.size = 0;
     res.contents = malloc(DEFAULT_CAPACITY * sizeof(int));
     
-    if (res.contents == NULL) {
-        printf("Memory allocation failed\n");
-        res.capacity = 0;
-    }
+    if (res.contents == NULL) res.capacity = 0;
     else res.capacity = DEFAULT_CAPACITY;
 
     return res;
@@ -25,11 +22,26 @@ void delete_vertexlist(VertexList *list) {
     list->contents = NULL;
 }
 
-void set_vertexlist_capacity(VertexList *list, int new_cap) {
-    VertexList *temp = realloc(list, new_cap * sizeof(int));
+boolean set_vertexlist_capacity(VertexList *list, int new_cap) {
+    if (new_cap < 0 || new_cap < list->size) return false;
+    if (new_cap == list->capacity) return true;
+
+    if (new_cap == 0) {
+        delete_vertexlist(list);
+        return true;
+    }
+
+    int *temp = malloc(new_cap * sizeof(int));
+    if (temp == NULL) return false;
+
+    for (int i = 0; i < list->size; i++) {
+        temp[i] = list->contents[i];
+    }
     
-    if (temp != NULL) list = temp;
-    else return;
+    free(list->contents);
+    list->contents = temp;
+    list->capacity = new_cap;
+    return true;
 }
 
 // PREDICATES
