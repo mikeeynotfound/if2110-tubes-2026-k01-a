@@ -20,7 +20,9 @@ VertexList create_vertexlist() {
 void delete_vertexlist(VertexList *list) {
     list->capacity = 0;
     list->size = 0;
+    
     free(list->contents);
+    list->contents = NULL;
 }
 
 void set_vertexlist_capacity(VertexList *list, int new_cap) {

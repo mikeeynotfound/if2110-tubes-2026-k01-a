@@ -15,8 +15,8 @@ typedef struct {
 typedef struct {
     VertexList *out;            // edges menuju keluar page
     VertexList *in;             // edges menuju ke dalam page (backlink)
-    int capacity;
     int size;
+    int capacity;
 } Graph;
 
 // -------------- ADT LINKS --------------
@@ -37,7 +37,8 @@ void remove_link(VertexList *list, int dest_id);
 // ----------- ADT GRAPH ------------
 // CONSTRUCTOR AND DESTRUCTOR
 Graph create_graph();
-Graph delete_graph();
+Graph delete_graph(Graph *graph);
+void set_graph_capacity(Graph *graph, int new_cap);
 
 // GETTER AND SETTER
 VertexList get_in_links(Graph *graph, int id);
