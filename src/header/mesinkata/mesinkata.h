@@ -7,13 +7,12 @@
 /* KONSTANTA & SYMBOL */
 #define MARK ';'
 #define NMAX 500
-#define BLANK ''
+#define BLANK ' '
 
-typedef struct Word
-{
+typedef struct Word{
     char TabWord[NMAX]; /* menyimpan kata */
     int length; /* panjang kata */
-};
+} Word;
 
 /* variasi global*/
 extern Word currentWord;
