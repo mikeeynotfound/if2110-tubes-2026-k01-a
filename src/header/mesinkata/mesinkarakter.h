@@ -1,7 +1,7 @@
 #ifndef MESINKARAKTER_H
 #define MESINKARAKTER_H
 
-#include "boolean.h"
+#include "header/boolean.h"
 
 /* MESIN KARAKTER */
 /* Pita karakter dibaca dari masukan standar dan diakhiri karakter MARK. */
@@ -29,4 +29,10 @@ void ADV(void);
 boolean EOP(void);
 /* Menghasilkan true jika currentChar == MARK atau mencapai EOF (End of File), false jika tidak. */
 
+boolean STARTFILE(const char *path);
+/* Membuka file pada path sebagai pita. Mengembalikan true jika berhasil,
+   false jika file tidak dapat dibuka. */
+
+boolean EOT(void);
+/* true jika pita benar-benar habis (EOF), tidak bertemu MARK. */
 #endif

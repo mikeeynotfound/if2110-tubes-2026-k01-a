@@ -1,7 +1,7 @@
 #include "header/mesinkata/mesinkata.h"
-#include "header/mesinkata/mesinkarakter.h"
 #include <stdio.h>
 
+Word currentWord;
 /* Primitif Mesin Kata */
 
 void CopyWord(void){
@@ -62,7 +62,7 @@ void ADVWORD(void){
           Jika currentChar == MARK, maka EOPWORD() bernilai true. */
 
 boolean EOPWORD(void){
-    return currentChar == ';' ;
+    return currentChar == MARK ;
 }
 /* Menghasilkan true jika currentChar == MARK, false jika tidak. */
 
@@ -89,6 +89,7 @@ int wordToInt(Word W) {
 
     if (W.length == 0) return 0; // Jika kata kosong
     if (i == W.length) return 0; // Tidak ada digit yang dapat dikonversi
+    if (W.length - i > 9) return 0; // lebih dari 9 digit: tidak valid 
 
     if (W.TabWord[0] == '-') {
         sign = -1;
@@ -97,7 +98,7 @@ int wordToInt(Word W) {
         i++;
     }
 
-    for (i = 0 ; i < W.length; i++) {
+    for ( ; i < W.length; i++)  {
         if (W.TabWord[i] >= '0' && W.TabWord[i] <= '9') {
             result = result * 10 + (W.TabWord[i] - '0');
         } else {

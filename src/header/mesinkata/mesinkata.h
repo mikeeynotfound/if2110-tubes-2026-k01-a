@@ -2,7 +2,8 @@
 #define MESIN_KATA_H
 
 #include <stdio.h>
-#include "boolean.h"
+#include "header/boolean.h"
+#include "header/mesinkata/mesinkarakter.h"
 
 /* KONSTANTA & SYMBOL */
 #define MARK ';'
