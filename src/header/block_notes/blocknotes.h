@@ -23,13 +23,15 @@ void blocknotes_init(List *block);
 
 boolean blocknotes_is_full(List block);
 
-boolean blocknotes_add_block(List *L, char* keterangan, unsigned char type, char id_local);
+boolean blocknotes_add_block(List *L, char* keterangan, unsigned char type, int posisi);
 
-boolean blocknotes_edit_keterangan_block(List *L, char id_local, char* keterangan_baru);
+boolean blocknotes_edit_keterangan_block(List *L, int id_block, char* keterangan_baru);
 
-boolean blocknotes_check_block(List *L,char id_local);
+boolean blocknotes_move_block(List *L, int new_pos);
 
-boolean blocknotes_delete_block(List *block);
+boolean blocknotes_check_block(List *L,int id_block);
+
+boolean blocknotes_delete_block(List *block, int id_block);
 
 void blocknotes_printblock(List L);
 
