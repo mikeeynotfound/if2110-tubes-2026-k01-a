@@ -4,16 +4,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include"header/block_notes/blocknotes.h"
 #define Nil NULL
-
-typedef int Blocks; // temporary
 
 typedef struct Page {
     int parentID;
     int ID;
     char* Judul;
-    Blocks Block;
+    List Block;
 } Page;
 
 typedef Page Eltype;
