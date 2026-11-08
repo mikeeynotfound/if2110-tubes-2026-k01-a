@@ -5,27 +5,25 @@
 #include"header/util/util.h"
 
 
-static AddressBlock createNode(char* keterangan, unsigned char type, int id){
-    AddressBlock new;
+static AddressBlock createNode(char* keterangan, unsigned char type, int* id){
+    AddressBlock new = (AddressBlock) malloc(sizeof(*new));
     new->keterangan = Util_strdup(keterangan);
     new->type = type;
     new->checked = false;
-    new->id = id;
+    new->id = *id;
     new->next = NULL;
-
+    (*id)++;
+    
     return new;
 }
 
 static boolean isEmpty(List block)
 {
-    if (&block ==NULL){
-        return true;
-    }
-    return false;
+    return (block==NULL);
 }
 
-static int length(List block){
-    if(blocknotes_isEmpty(block)){
+int blocknotes_length(List block){
+    if(isEmpty(block)){
         return 0;
     }
     else{
@@ -67,20 +65,21 @@ boolean blocknotes_is_full(List block){
 }
 
 boolean blocknotes_add_block(List *L, char* keterangan, unsigned char type, int posisi, int* id){
-    int len = length(*L);
+    int len = blocknotes_length(*L);
     if(posisi<1 || posisi>len+1){
         return false;
     }
 
-    if((*L) == NULL){
-        AddressBlock first_block = createNode(*keterangan,type,1);
-        (*L) = first_block;   
-    }
     AddressBlock p = *L;
-    AddressBlock new = createNode(*keterangan,type,*id);
-    (*id)++;
+    AddressBlock new = createNode(keterangan,type,id);
+
+    if (posisi == 1){
+        new->next = *L;
+        *L = new;
+        return true;
+    }
     if(new!=NULL){
-        int count = 0;
+        int count = 1;
         while(count<posisi-1){
             p = p->next;
             count++;
@@ -94,7 +93,7 @@ boolean blocknotes_add_block(List *L, char* keterangan, unsigned char type, int 
 }
 
 boolean blocknotes_edit_keterangan_block(List *L, int id_block, char* keterangan_baru){
-    // Note Keterangan Sudah Dijamin tidak kosong
+    
     if(L == NULL || (*L)==NULL){
         return false;
     }
@@ -117,7 +116,7 @@ boolean blocknotes_move_block(List *L, int new_pos, int id){
     if(L==NULL || (*L)==NULL){
         return false;
     }
-    int len = length(*L);
+    int len = blocknotes_length(*L);
     if(new_pos<1 || new_pos>len){
         return false;
     }
@@ -187,7 +186,10 @@ boolean blocknotes_check_block(List *L, int id_block){
     if (p==NULL){
         return false;
     }
-    p->checked = true;
+    if (p->type == 0){
+        return false;
+    }
+    p->checked = !p->checked;
     return true;
 }
 
@@ -221,23 +223,25 @@ boolean blocknotes_delete_block(List *block, int id_block){
 
 void blocknotes_printblock(List L){
     if (L==NULL){
+        printf("Block Masih Kosong\n");
         return;
     }
     AddressBlock p = L;
-
+    int i = 1;
     while(p!=NULL){
         if(p->type == 0){
-            printf("[B%d] TEXT : %s\n",p->id,p->keterangan);
+            printf("%d [B%d] TEXT : %s\n",i,p->id,p->keterangan);
         }
         else{
             if(p->checked == true){
-                printf("[B%d] CHECK [X] %s\n",p->id,p->keterangan);
+                printf("%d [B%d] CHECK [X] %s\n",i,p->id,p->keterangan);
             }
             else{
-                printf("[B%d] CHECK [ ] %s\n",p->id,p->keterangan);
+                printf("%d [B%d] CHECK [ ] %s\n",i,p->id,p->keterangan);
             }
         }
         p = p->next;
+        i++;
     }
 }
 
