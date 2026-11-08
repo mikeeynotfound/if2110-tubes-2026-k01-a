@@ -25,7 +25,7 @@ char* Util_strndup(const char* src, int size){
 }
 
 void Util_strreplace(char** old_string, char* new_string){
-    if (old_string != NULL || *old_string != NULL){
+    if (old_string != NULL && *old_string != NULL){
         free(*old_string);
     }
     *old_string = Util_strdup(new_string);
