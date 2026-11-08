@@ -2,7 +2,7 @@
 #define BLOCK_NOTES
 
 /* Fitur Block Pada Notes, digunakan untuk menampilkan data dan konten dengan List Berkait*/
-#include"boolean.h"
+#include"header/boolean.h"
 #define MAX_BLOCK 10
 
 typedef struct BlockNotes *AddressBlock;
@@ -19,6 +19,8 @@ typedef AddressBlock List;
 void blocknotes_init(List *block);
 
 boolean blocknotes_is_full(List block);
+
+int blocknotes_length(List block);
 
 boolean blocknotes_add_block(List *L, char* keterangan, unsigned char type, int posisi, int* block_id);
 
