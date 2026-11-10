@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "header/F06/graph.h"
+#include "header/graph/graph.h"
 
 static void print_vertexlist(const VertexList *list) {
     printf("[");

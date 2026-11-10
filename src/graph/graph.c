@@ -1,4 +1,4 @@
-#include "header/F06/graph.h"
+#include "header/graph/graph.h"
 #include <stdlib.h>
 
 // CONSTRUCTOR AND DESTRUCTOR
