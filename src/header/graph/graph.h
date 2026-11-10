@@ -2,6 +2,8 @@
 #define GRAPH_H
 
 #include "header/boolean.h"
+#include "header/page/page.h"
+
 #define DEFAULT_CAPACITY 5
 
 // adt dynamic list untuk link per node
@@ -44,10 +46,14 @@ boolean set_graph_capacity(Graph *graph, int new_cap);
 VertexList *get_in_links(Graph *graph, int id);
 VertexList *get_out_links(Graph *graph, int id);
 
-void add_links(Graph *graph, int id_source, int id_dest);
+void add_links(Graph *graph, int id_source, int id_dest);           // nanti bisa langsung add ke main ini
 void remove_links(Graph *graph, int id_source, int id_dest);
 
 // PREDICATES
 boolean is_link_exist(Graph *graph, int id_source, int id_dest);
+
+// -------- F06 --------
+void show_links(TreeNode *root, Graph *graph, int id);              // ini buat integrasi ke main
+void show_backlinks(TreeNode *root, Graph *graph, int id);
 
 #endif

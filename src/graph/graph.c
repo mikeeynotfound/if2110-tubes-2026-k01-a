@@ -1,6 +1,44 @@
 #include "header/graph/graph.h"
 #include <stdlib.h>
+#include <stdio.h>
 
+// --------- F06 -----------
+static void print_page_title(TreeNode *root, int id) {
+    TreeNode *page = giveTree(root, id);
+
+    if (page == Nil) {
+        printf("Error: Page not found\n");
+        return;
+    }
+
+    printf("[P%d] %s\n", page->data.ID, page->data.Judul);
+}
+
+void show_links(TreeNode *root, Graph *graph, int id) {
+    VertexList *links = get_out_links(graph, id);
+
+    for (int i = 0; i < links->size; i++) {
+        print_page_title(root, links->contents[i]);
+    }
+
+    if (links->size <= 0) {
+        printf("Belum ada halaman yang dirujuk\n");
+    }
+}
+
+void show_backlinks(TreeNode *root, Graph *graph, int id) {
+    VertexList *links = get_in_links(graph, id);
+
+    for (int i = 0; i < links->size; i++) {
+        print_page_title(root, links->contents[i]);
+    }
+    
+    if (links->size <= 0) {
+        printf("Belum ada halaman yang dirujuk\n");
+    }
+}
+
+// --------- GRAPH ---------
 // CONSTRUCTOR AND DESTRUCTOR
 Graph create_graph() {
     Graph graph = {NULL, NULL, 0, 0};
