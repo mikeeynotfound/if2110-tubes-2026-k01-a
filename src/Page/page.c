@@ -117,16 +117,83 @@ void pageAdd(int parentId, char* judul, TreeNode* root){
         TreeNode* p = giveTree(root, parentId);
         Page b = createPage(judul);
         addChild(p, b);
+        printf("Halaman P%d berhasil dibuat.\n", b.ID);
     } else{
         printf("Halaman tidak dapat dibuat: parent P%d tidak ditemukan.\n", parentId);
     }
 }
 
-void pageView(int id, TreeNode* root){
+void printPath(TreeNode* root, int Id){
+    TreeNode* node = giveTree(root, Id);
+    if(node->data.ID != 0){
+        TreeNode* parent = giveTree(root, node->data.parentID);
+        if(parent != Nil){
+            printPath(root, node->data.parentID);
+            printf(" / ");
+        }
+    }
+    printf("P%d %s",node->data.ID, node->data.Judul);
+}
+
+void printLokasi(TreeNode* root, TreeNode* node){
+    if(node->data.ID != 0){
+        TreeNode* parent = giveTree(root, node->data.parentID);
+        if(parent != Nil){
+            printLokasi(root, parent);
+            printf(" / ");
+        }
+    }
+    printf("%s", node->data.Judul);
+}
+
+void pageView(int id, TreeNode* root, Multilist* ml){
     if(findTree(root, id)){
         TreeNode* a = giveTree(root, id);
         Page b = a->data;
-        printf("[P%d] %s. Parents: P%d\n", b.ID, b.Judul, b.parentID);
+        printf("[P%d] %s\nParents: P%d\n", b.ID, b.Judul, b.parentID);
+
+        printf("Lokasi: ");
+        printLokasi(root, a);
+        printf("\n");
+
+        printf("Tag: ");
+        int count = 0;
+        TagRelation* r = ml->page_head[id];
+        while(r != Nil){
+            if(count > 0) printf(", ");
+            printf("%s", r->tag->name);
+            count++;
+        }
+        if(count == 0) printf("(kosong)");
+        printf("\n");
+
+        printf("Blok:");
+        if(b.Block == Nil){
+            printf(" (kosong)\n");
+        } else{
+            printf("\n");
+            int no = 1;
+            AddressBlock p = b.Block;
+            while(p != Nil){
+                if(p->type == 1){
+                    printf("%d. [B%d] CHECK [%c] %s\n", no, p->id, p->checked ? 'x' : ' ', p->keterangan);
+                } else{
+                    printf("%d. [B%d] TEXT %s\n", no, p->id, p->keterangan);
+                }
+            }
+        }
+
+        printf("Subhalaman:");
+        if(a->firstChild == Nil){
+            printf(" (kosong)\n");
+        } else{
+            printf("\n");
+            TreeNode* c = a->firstChild;
+            while(c != Nil){
+                printf("- [P%d] %s\n", c->data.ID, c->data.Judul);
+                c = c->nextSibling;
+            }
+        }
     } else{
         printf("Halaman tidak ada\n");
     }
@@ -136,6 +203,7 @@ void pageTitle(int id, char* judulPengganti, TreeNode* root){
     if(findTree(root, id)){
         TreeNode* a = giveTree(root, id);
         a->data.Judul = judulPengganti;
+        printf("Judul halaman P%d berhasil diubah.\n", a->data.ID);
     } else{
         printf("Halaman tidak ada\n");
     }
@@ -173,6 +241,52 @@ void pageMove(int id, int parentIdBaru, TreeNode* root){
     TreeNode* baru = giveTree(parentBaru, id);
     baru->firstChild = anak;
 }
+
+PageStats pageStatsRec(TreeNode* node){
+    PageStats s = {1, 0, 0, 0, 0};
+
+    for(AddressBlock b = node->data.Block; b != Nil; b = b->next){
+        s.blok++;
+        if(b->type == 1){
+            s.checklist++;
+            if(b->checked) s.selesai++;
+        }
+    }
+
+    for(TreeNode* c = node->firstChild; c != Nil; c = c->nextSibling){
+        PageStats cs = pageStatsRec(c);
+        s.halaman   += cs.halaman;
+        s.blok      += cs.blok;
+        s.checklist += cs.checklist;
+        s.selesai   += cs.selesai;
+        if(cs.kedalaman + 1 > s.kedalaman) s.kedalaman = cs.kedalaman + 1;
+    }
+    return s;
+}
+
+void pageStats(TreeNode* root, int Id){
+    TreeNode* node = giveTree(root, Id);
+    if(node == Nil){
+        printf("Halaman tidak ada\n");
+        return;
+    }
+    PageStats s = pageStatsRec(node);
+    printf("Halaman: %d\n", s.halaman);
+    printf("Blok: %d\n", s.blok);
+    printf("Checklist: %d; selesai: %d\n", s.checklist, s.selesai);
+    printf("Kedalaman: %d\n", s.kedalaman);
+}
+
+void pageDeleteConfirmation(int id, TreeNode* root){
+    TreeNode* node = giveTree(root, id);
+    if(node == Nil){
+        printf("Halaman tidak ada\n");
+        return;
+    }
+    PageStats s = pageStatsRec(node);
+    printf("Hapus P%d dan subhalamannya: %d halaman, %d blok? (Y/N)\n", id, s.halaman, s.blok);
+}
+
 void pageDelete(int id, TreeNode* root){
     if(id == 0){
         printf("Halaman tidak dapat dihapus: Workspace (P0) adalah root.\n");
@@ -184,6 +298,7 @@ void pageDelete(int id, TreeNode* root){
         return;
     }
     
+    PageStats s = pageStatsRec(node);
     TreeNode* parent = giveTree(root, node->data.parentID);
     if(parent == Nil) return;
 
@@ -199,4 +314,5 @@ void pageDelete(int id, TreeNode* root){
     node->nextSibling = Nil;
 
     freeSubtree(node);
+    printf("%d halaman dan %d blok berhasil dihapus.\n", s.halaman, s.blok);
 }
