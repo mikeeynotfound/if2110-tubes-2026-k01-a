@@ -48,7 +48,18 @@ static void print_graph(const Graph *graph) {
 }
 
 int main() {
+    TreeNode *root = createTree();
 
+    pageAdd(0, "Morning Star", root);
+    pageAdd(1, "Halo Semua", root);
+    pageAdd(1, "Muahhh", root);
+    pageAdd(0, "lagi", root);
+    pageAdd(2, "lagi", root);
+    pageAdd(2, "lagi", root);
+    pageAdd(2, "lagi", root);
+
+    // ----------- ADT GRAPH TEST CASE ----------
+    printf("--------ADT GRAPH TEST CASES--------\n");
     // TEST CASE 1
     printf("--------TEST CASE 1--------\n");
     Graph g = create_graph();
@@ -93,7 +104,33 @@ int main() {
     print_vertexlist(get_in_links(&g, 2));
     printf("\n");
 
-    delete_graph(&g);
+    printf("---------TEST CASE 6-----------\n");
+    add_links(&g, 1, 2);
+    add_links(&g, 4, 2);
+    add_links(&g, 2, 5);
+    add_links(&g, 2, 7);
 
+    print_graph(&g);
+
+    // -----------F06 TEST CASES-----------
+    printf("-----------F06 TEST CASES-----------\n");
+    add_links(&g, 1, 2);
+    add_links(&g, 4, 2);
+    add_links(&g, 2, 5);
+    add_links(&g, 2, 7);
+
+    printf("P2 Links: \n\n");
+    show_links(root, &g, 2);
+
+    printf("\nP2 Backlinks:\n\n");
+    show_backlinks(root, &g, 2);
+
+    printf("\nP7 Links: \n\n");
+    show_links(root, &g, 7);
+
+    printf("\nP7 Backlinks:\n\n");
+    show_backlinks(root, &g, 7);
+
+    delete_graph(&g);
     return 0;
 }
