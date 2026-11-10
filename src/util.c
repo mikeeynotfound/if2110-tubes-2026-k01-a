@@ -43,6 +43,9 @@ boolean Util_streq(const char* string1, const char* string2){
     if(string1 == string2){
         return true;
     }
+    if (Util_strlen(string1) != Util_strlen(string2)){
+        return false;
+    }
     if(string1==NULL || string2 == NULL){
         return false;
     }
