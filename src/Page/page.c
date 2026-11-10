@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "tree.h"
+#include "header/page/page.h"
 
 int id_maker = 0;
 
-Node* createTree(){
-    Node* b = malloc(sizeof(Node));
+TreeNode* createTree(){
+    TreeNode* b = malloc(sizeof(TreeNode));
     b->data.Block = 0;
     b->data.Judul = "Workspace";
     b->data.ID = 0;
@@ -14,7 +14,7 @@ Node* createTree(){
     return b;
 }
 
-int findTree(Node* tree, int Id){
+int findTree(TreeNode* tree, int Id){
     if(tree == Nil) return 0;
     else{
         if(tree->data.ID == Id) return 1;
@@ -22,7 +22,7 @@ int findTree(Node* tree, int Id){
     }
 }
 
-Node* giveTree(Node* tree, int Id){
+TreeNode* giveTree(TreeNode* tree, int Id){
     if(!findTree(tree, Id)) return Nil;
 
     if(Id == tree->data.ID) return tree;
@@ -30,13 +30,13 @@ Node* giveTree(Node* tree, int Id){
     else return giveTree(tree->nextSibling, Id);
 }
 
-void addChild(Node* parent, Eltype child){
-    Node* a = createTree();
+void addChild(TreeNode* parent, Eltype child){
+    TreeNode* a = createTree();
     a->data = child;
     a->data.parentID = parent->data.ID;
     if(parent->firstChild != Nil){
-        Node* prev = parent;
-        Node* b = parent->firstChild;
+        TreeNode* prev = parent;
+        TreeNode* b = parent->firstChild;
         while(b->data.ID < child.ID && b->nextSibling != Nil){
             prev = b;
             b = b->nextSibling;
@@ -61,7 +61,7 @@ void addChild(Node* parent, Eltype child){
     }
 }
 
-void displayTree(Node* a, int i) {
+void displayTree(TreeNode* a, int i) {
     if (a == NULL) {
         return;
     }
@@ -69,21 +69,21 @@ void displayTree(Node* a, int i) {
         printf("  ");
     }
     printf("[P%d] %s\n", a->data.ID, a->data.Judul);
-    Node* child = a->firstChild;
+    TreeNode* child = a->firstChild;
     while (child != NULL) {
         displayTree(child, i+1);
         child = child->nextSibling;
     }
 }
 
-void detachNode(Node* node, Node* root){
-    Node* parent = giveTree(root, node->data.parentID);
+void detachNode(TreeNode* node, TreeNode* root){
+    TreeNode* parent = giveTree(root, node->data.parentID);
     if(parent == Nil) return;
 
     if(parent->firstChild == node){
         parent->firstChild = node->nextSibling;
     } else{
-        Node* prev = parent->firstChild;
+        TreeNode* prev = parent->firstChild;
         while(prev != Nil && prev->nextSibling != node){
             prev = prev->nextSibling;
         }
@@ -92,10 +92,10 @@ void detachNode(Node* node, Node* root){
     node->nextSibling = Nil;
 }
 
-void freeSubtree(Node* n){
-    Node* child = n->firstChild;
+void freeSubtree(TreeNode* n){
+    TreeNode* child = n->firstChild;
     while(child != Nil){
-        Node* next = child->nextSibling;
+        TreeNode* next = child->nextSibling;
         freeSubtree(child);
         child = next;
     }
@@ -112,9 +112,9 @@ Page createPage(char* judul){
     return a;
 }
 
-void pageAdd(int parentId, char* judul, Node* root){
+void pageAdd(int parentId, char* judul, TreeNode* root){
     if(findTree(root, parentId)){
-        Node* p = giveTree(root, parentId);
+        TreeNode* p = giveTree(root, parentId);
         Page b = createPage(judul);
         addChild(p, b);
     } else{
@@ -122,9 +122,9 @@ void pageAdd(int parentId, char* judul, Node* root){
     }
 }
 
-void pageView(int id, Node* root){
+void pageView(int id, TreeNode* root){
     if(findTree(root, id)){
-        Node* a = giveTree(root, id);
+        TreeNode* a = giveTree(root, id);
         Page b = a->data;
         printf("[P%d] %s. Parents: P%d\n", b.ID, b.Judul, b.parentID);
     } else{
@@ -132,28 +132,28 @@ void pageView(int id, Node* root){
     }
 }
 
-void pageTitle(int id, char* judulPengganti, Node* root){
+void pageTitle(int id, char* judulPengganti, TreeNode* root){
     if(findTree(root, id)){
-        Node* a = giveTree(root, id);
+        TreeNode* a = giveTree(root, id);
         a->data.Judul = judulPengganti;
     } else{
         printf("Halaman tidak ada\n");
     }
 }
 
-void pageMove(int id, int parentIdBaru, Node* root){
+void pageMove(int id, int parentIdBaru, TreeNode* root){
     if(id == 0){
         printf("Halaman tidak dapat dipindahkan: Workspace.\n");
         return;
     }
 
-    Node* node = giveTree(root, id);
+    TreeNode* node = giveTree(root, id);
     if(node == Nil){
         printf("Halaman tidak ada\n");
         return;
     }
 
-    Node* parentBaru = giveTree(root, parentIdBaru);
+    TreeNode* parentBaru = giveTree(root, parentIdBaru);
     if(parentBaru == Nil){
         printf("Halaman tidak dapat dipindahkan: parent P%d tidak ditemukan.\n", parentIdBaru);
         return;
@@ -164,33 +164,33 @@ void pageMove(int id, int parentIdBaru, Node* root){
     }
 
     Eltype data = node->data;
-    Node* anak = node->firstChild;   
+    TreeNode* anak = node->firstChild;   
 
     detachNode(node, root);
     free(node);                     
 
     addChild(parentBaru, data);
-    Node* baru = giveTree(parentBaru, id);
+    TreeNode* baru = giveTree(parentBaru, id);
     baru->firstChild = anak;
 }
-void pageDelete(int id, Node* root){
+void pageDelete(int id, TreeNode* root){
     if(id == 0){
         printf("Halaman tidak dapat dihapus: Workspace (P0) adalah root.\n");
         return;
     }
-    Node* node = giveTree(root, id);
+    TreeNode* node = giveTree(root, id);
     if(node == Nil){
         printf("Halaman tidak ada\n");
         return;
     }
     
-    Node* parent = giveTree(root, node->data.parentID);
+    TreeNode* parent = giveTree(root, node->data.parentID);
     if(parent == Nil) return;
 
     if(parent->firstChild == node){
         parent->firstChild = node->nextSibling;
     } else{
-        Node* prev = parent->firstChild;
+        TreeNode* prev = parent->firstChild;
         while(prev != Nil && prev->nextSibling != node){
             prev = prev->nextSibling;
         }

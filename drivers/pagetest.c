@@ -1,7 +1,7 @@
-#include "tree.h"
+#include "header/page/page.h"
 
 int main(){
-  Node* a = createTree();
+  TreeNode* a = createTree();
 
   pageAdd(0, "Morning Star", a);
   pageAdd(0, "Halo Semua", a);
