@@ -40,10 +40,10 @@ void show_backlinks(TreeNode *root, Graph *graph, int id) {
 
 // --------- GRAPH ---------
 // CONSTRUCTOR AND DESTRUCTOR
-Graph create_graph() {
-    Graph graph = {NULL, NULL, 0, 0};
+Graph *create_graph() {
+    Graph *graph = malloc(sizeof(Graph));
 
-    set_graph_capacity(&graph, DEFAULT_CAPACITY);
+    set_graph_capacity(graph, DEFAULT_CAPACITY);
     return graph;
 }
 

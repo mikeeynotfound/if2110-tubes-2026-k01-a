@@ -62,7 +62,8 @@ int main() {
     printf("--------ADT GRAPH TEST CASES--------\n");
     // TEST CASE 1
     printf("--------TEST CASE 1--------\n");
-    Graph g = create_graph();
+    Graph *graph = create_graph();
+    Graph g = *graph;
 
     print_graph(&g);
 

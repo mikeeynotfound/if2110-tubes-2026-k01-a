@@ -38,7 +38,7 @@ void remove_vertex(VertexList *list, int dest_id);
 
 // ----------- ADT GRAPH ------------
 // CONSTRUCTOR AND DESTRUCTOR
-Graph create_graph();
+Graph *create_graph();
 void delete_graph(Graph *graph);
 boolean set_graph_capacity(Graph *graph, int new_cap);
 
